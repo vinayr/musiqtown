@@ -1,0 +1,146 @@
+@font-face {
+	font-family: 'Maven Pro';
+	font-style: normal;
+	font-weight: 700;
+	src:
+		url('http://themes.googleusercontent.com/static/fonts/mavenpro/v4/MG9KbUZFchDs94Tbv9U-pT8E0i7KZn-EPnyo3HZu7kw.woff')
+		format('woff');
+}
+
+@font-face {
+	font-family: 'Maven Pro bold';
+	font-style: normal;
+	font-weight: 700;
+	src:
+		url('http://themes.googleusercontent.com/static/fonts/mavenpro/v4/uDssvmXgp7Nj3i336k_dSnhCUOGz7vYGh680lGh-uXM.woff')
+		format('woff');
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Maven Pro', cursive;
+}
+
+b {
+	font-family : 'Maven Pro bold';
+}
+
+
+
+li {
+	list-style-type: none;
+}
+
+#popup {
+	width: 600px;
+}
+
+#searchForm {
+	padding: 20px;
+}
+
+#searchField {
+	width: 80%;
+	font-size: 20px;
+	font-family: 'Maven Pro', cursive;
+}
+
+#uniform-searchButton {
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+
+#musics li {
+	cursor: pointer;
+	padding: 10px 20px 0 20px;
+	vertical-align: middle;
+	min-height: 60px;
+}
+
+#musics li:hover {
+	background-color: black;
+	color: white;
+	background-image: none;
+}
+
+#musics span {
+	padding-right: 50px;
+	font-size: 10px;
+	padding-top: 100px;
+}
+
+
+.item0 {
+	background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255,
+		0) ), to(rgba(255, 255, 255, 0) ) ), url(../images/noise.png);
+	background-color: #CFCFCF;
+}
+
+.item1 {
+	background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255,
+		0) ), to(rgba(255, 255, 255, 0) ) ), url(../images/noise.png);
+	background-color: #F5F5F5;
+}
+
+.shared4 {
+	background-image: url(../images/4shared.png);
+	background-repeat: no-repeat;
+	background-position: right top;
+	min-height: 60px;
+}
+
+/* containers hide initially */
+#loading {
+	display: none;
+	width: 100px;
+	margin: 0px auto;
+	padding: 10px 10px 30px 10px;
+	text-align: center;
+}
+
+.notFound {
+	width:100%;
+	margin: 0px auto;
+	padding: 10px 10px 30px 10px;
+	text-align: center;
+	display: block;
+}
+
+#autoComplete {
+	display: none;
+}
+
+#autoComplete li {
+	padding: 5px;
+	cursor: pointer;
+}
+
+#autoComplete li:hover {
+	background-color: #F5F5F5;
+}
+
+/* stylish scrollbar ! */
+:-webkit-scrollbar-track-piece {
+	background-color: #f8f8f8;
+	-webkit-border-radius: 0;
+}
+
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+	background-color: #white;
+	padding: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+	height: 50px;
+	background-color: #999;
+	-webkit-border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	height: 50px;
+	background-color: #9f9f9f;
+	-webkit-border-radius: 4px;
+}
