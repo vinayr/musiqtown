@@ -136,11 +136,14 @@ Events.submitForm = function() {
 
 		$("#musics li").click(function() {
 
+			/*
 			chrome.tabs.create({
 				'url' : $(this).find('.fileUrl').val()
 			}, function(tab) {
 				window.close();
 			});
+			*/
+			window.open($(this).find('.fileUrl').val());
 
 		});
 	});
