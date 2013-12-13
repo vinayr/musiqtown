@@ -61,50 +61,6 @@ Events.submitForm = function() {
 	$("#autoComplete").hide();
 	$("#musics").html("");
 	$("#loading").show();
-
-	/*
-	$.ajax({
-		url : 'http://mp3skull.com/search.php?q=' + escape(q),
-		complete : function(data) {
-			$("#autoComplete").hide();
-			$("#loading").hide();
-			var page = data.responseText;
-
-			var musics = $.map($("div[class*=show]", page), function(musica) {
-				var item = {};
-				item.nome = $(musica).find('b').text();
-				item.fileUrl = $(musica).find("a").attr("href");
-
-				var moreInfo = $(musica).find('.left').html().replace(/<.*>/,
-						'').replace(/<br>/g, '|').trim().split("|");
-
-				$.map(moreInfo, function(valor) {
-					if (valor.indexOf("kbps") != -1) {
-						item.bitTrate = valor;
-					}
-					if (valor.indexOf("mb") != -1) {
-						item.size = valor;
-					}
-					if (valor.indexOf(":") != -1) {
-						item.length = valor;
-					}
-				});
-				return item;
-			});
-			renderResults(musics);
-
-			$("#musics li").click(function() {
-
-				chrome.tabs.create({
-					'url' : $(this).find('.fileUrl').val()
-				}, function(tab) {
-					window.close();
-				});
-
-			});
-		}
-	});
-	*/
 	
 	$.get('http://mp3skull.com/search.php?q=' + escape(q), function(data) {
 		$("#autoComplete").hide();
@@ -135,16 +91,7 @@ Events.submitForm = function() {
 		renderResults(musics);
 
 		$("#musics li").click(function() {
-
-			/*
-			chrome.tabs.create({
-				'url' : $(this).find('.fileUrl').val()
-			}, function(tab) {
-				window.close();
-			});
-			*/
 			window.open($(this).find('.fileUrl').val());
-
 		});
 	});
 	
@@ -154,19 +101,6 @@ Events.submitForm = function() {
 Events.typingInSearchField = function(event) {
 	if (event.keyCode > 47 && event.keyCode < 91 || event.keyCode == 8){
 		Events.selectedInAutoComplete = -1;
-		/*
-		$.ajax({
-			//url : "http://clients1.google.com/complete/search?client=youtube-reduced&q="+$('#searchField').val()+"&gs_nf=1&ds=yt&cp=5&gs_id=12&callback=Events.autoCompleteResults",
-			url: "http://ac1.mp3skull.com/autocomplete/get.php?q="+
-				$('#searchField').val().replace("%20",""),
-
-			complete : function(x){
-				x = x.responseText.match(/new Array.*?\)/)
-				x = "Events.autoCompleteResults(" + x + ")";
-				eval(x);
-			}
-		});
-		*/
 		
 		//"http://clients1.google.com/complete/search?client=youtube-reduced&q="+$('#searchField').val()+"&gs_nf=1&ds=yt&cp=5&gs_id=12&callback=Events.autoCompleteResults",
 		$.get("http://ac1.mp3skull.com/autocomplete/get.php?q="+
