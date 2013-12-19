@@ -14,6 +14,10 @@ handlers:
 - url: /javascript
   static_dir: javascript
   
+- url: /admin/.*
+  script: google.appengine.ext.admin.application
+  login: admin
+  
 - url: /.*
   script: lisn.application
   login: admin
