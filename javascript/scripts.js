@@ -66,10 +66,11 @@ Events.submitForm = function() {
 		$("#autoComplete").hide();
 		$("#loading").hide();
 		var page = data.responseText;
+		//console.log(page);
 
 		var musics = $.map($("div[class*=show]", page), function(musica) {
 			var item = {};
-			item.nome = $(musica).find('b').text();
+			item.name = $(musica).find('strong').text();			
 			item.fileUrl = $(musica).find("a").attr("href");
 
 			var moreInfo = $(musica).find('.left').html().replace(/<.*>/,
@@ -87,7 +88,17 @@ Events.submitForm = function() {
 				}
 			});
 			return item;
+		});			
+			
+		$('#music_table').html( '<table id="search_table"></table>' );
+		
+		$('#search_table').dataTable( {
+			"aoColumns": [
+				{ "sTitle": "Name" },
+				{ "sTitle": "Length" }
+			]
 		});
+		
 		renderResults(musics);
 
 		$("#musics li").click(function() {
@@ -129,30 +140,32 @@ Events.selectItemInAutoComplete = function(item){
 	Events.submitForm();
 };
 
-UI = {};
-
-UI.stylishForms = function(){
-    $(function(){
-        $("input, textarea, select, button").uniform();
-    });
-};
-
 function renderResults(musics){
 
 	var htmlPure =  $.map(musics,function(music,index){
 		var shared4 = "";
 
-		music.nome = music.nome.replace("mp3","").replace(/([A-z]+\.)+[A-z]+/,"").replace(/\s*-\s*$/,"").replace(/\(.*\)/,"");
+		music.name = music.name.replace("mp3","").replace(/([A-z]+\.)+[A-z]+/,"").replace(/\s*-\s*$/,"").replace(/\(.*\)/,"");
 		
 		if (music.fileUrl.indexOf("4shared") != -1)
 			shared4 = ' class="shared4"';
-
-		return "<li class=\"item"+index%2+"\"><div"+shared4+"><b>"+ music.nome + "</b><br>" 
-			+ (music.size != null ?  ("<span><b>Filesize: </b>"+music.size+"</span>") : '')
-			+ (music.bitTrate != null ?  ("<span><b>Bitrate: </b>"+music.bitTrate+"</span>") : '')
-			+ (music.length != null ?  ("<span><b>Length: </b>"+music.length+"</span>") : '')
-			+ '<input type="hidden" class="fileUrl" value="'+music.fileUrl+'">'
-			+ "</div></li>";
+/*
+		return "<li class=\"item"+index%2+"\">"
+				+ "<div"+shared4+">
+					+ "<b>"+ music.name + "</b><br>" 
+					+ (music.size != null ?  ("<span><b>Filesize: </b>"+music.size+"</span>") : '')
+					+ (music.bitTrate != null ?  ("<span><b>Bitrate: </b>"+music.bitTrate+"</span>") : '')
+					+ (music.length != null ?  ("<span><b>Length: </b>"+music.length+"</span>") : '')
+					+ '<input type="hidden" class="fileUrl" value="'+music.fileUrl+'">'
+				+ "</div>"
+			+ "</li>";
+*/			
+				
+		$('#search_table').dataTable().fnAddData( [
+			music.name,			
+			//music.fileUrl,
+			music.length != null ? music.length : '' ]
+		);
 
 	}).join('');
 
