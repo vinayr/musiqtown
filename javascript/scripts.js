@@ -56,7 +56,7 @@ Events.submitFormOnEnterAndAutoSearchArrows = function() {
 
 
 
-Events.submitForm = function() {
+Events.submitForm = function() {	
 	var q = document.getElementById('searchField').value;
 	$("#autoComplete").hide();
 	$("#musics").html("");
@@ -92,12 +92,22 @@ Events.submitForm = function() {
 			
 		$('#music_table').html( '<table id="search_table"></table>' );
 		
-		$('#search_table').dataTable( {
+		var oTable = $('#search_table').dataTable( {
+			"sScrollY": "200px",
+			"bPaginate": false,
 			"aoColumns": [
 				{ "sTitle": "Name" },
-				{ "sTitle": "Length" }
+				{ "sTitle": "Length" },
+				{ "bVisible": false}
 			]
 		});
+		
+		$("#search_table").on("click", "tr", function() {
+			var data = oTable.fnGetData(this);
+			//console.log(data[2]);
+			playMusic(data[0], data[2]);
+		});
+		
 		
 		renderResults(musics);
 
@@ -162,9 +172,9 @@ function renderResults(musics){
 */			
 				
 		$('#search_table').dataTable().fnAddData( [
-			music.name,			
-			//music.fileUrl,
-			music.length != null ? music.length : '' ]
+			music.name,	
+			music.length != null ? music.length : '' ,
+			music.fileUrl ]
 		);
 
 	}).join('');
@@ -173,4 +183,25 @@ function renderResults(musics){
 	
 	$("#musics").html(htmlPure == '' ? notFound : htmlPure);
 };
+	
+function playMusic(title, url) {
 
+	$("#jquery_jplayer_1").jPlayer("destroy");
+	
+	$("#jquery_jplayer_1").jPlayer({
+		ready: function (event) {
+			$(this).jPlayer("setMedia", {
+				mp3: url
+			});
+			$(this).jPlayer("play", 0);
+		},
+		swfPath: "/",
+		supplied: "mp3, m4a, oga",
+		wmode: "window",
+		smoothPlayBar: true,
+		keyEnabled: true
+	});
+	
+	$('.jp-title li').text(title);
+
+}

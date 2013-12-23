@@ -6,5 +6,6 @@ $(document).ready(function() {
 	$('#searchField').focus();
 	$('#searchField').keyup(Events.typingInSearchField);
 	$('#searchButton').click(Events.submitForm);
-	
+  
+    $("#jquery_jplayer_1").jPlayer();
 });
