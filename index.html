@@ -14,7 +14,6 @@
 	  <script type="text/javascript" src="javascript/jquery.jplayer.min.js"></script>
       <script type="text/javascript" src="javascript/jquery.xdomainajax.js"></script>
       <script type="text/javascript" src="javascript/scripts.js"></script>
-      <script type="text/javascript" src="javascript/popup.js"></script>
    </head>
    <body>             
 	  <div id="jplayer_container">	  
@@ -61,11 +60,16 @@
 	  </div>
 	  
 	  <div id="popup">
-         <div id="searchForm">
-            <input type="text" id="searchField" /> <input type="submit"
-               id="searchButton" value="Search" /><br />
+	     <div id="tagForm">
+            <input type="text" id="tagField" /> 
+			<input type="submit" id="tagButton" value="Tag" /><br />
             <ul id="autoComplete"></ul>
          </div>
+         <div id="searchForm">
+            <input type="text" id="searchField" /> 
+			<input type="submit" id="searchButton" value="Search" /><br />
+            <ul id="autoComplete"></ul>
+         </div>		 
          <div>
             <div id="loading">
                <img src="images/loading.gif" alt="Loading..." /><br />Loading...
