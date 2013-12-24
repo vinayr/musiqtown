@@ -1,3 +1,9 @@
+var currentSong = {
+	title: null,
+	length: null,
+	url: null
+};
+
 Events = {};
 
 Events.enableFocusCall = function() {
@@ -104,8 +110,11 @@ Events.submitForm = function() {
 		
 		$("#search_table").on("click", "tr", function() {
 			var data = oTable.fnGetData(this);
+			currentSong.title = data[0];
+			currentSong.length = data[1];
+			currentSong.url = data[2];
 			//console.log(data[2]);
-			playMusic(data[0], data[2]);
+			playMusic(currentSong.title, currentSong.url);
 		});
 		
 		
@@ -117,6 +126,14 @@ Events.submitForm = function() {
 	});
 	
 	return false;
+};
+
+Events.tagForm = function() {
+	var tag = document.getElementById('tagField').value;
+	console.log(tag);
+	console.log(currentSong.title);
+	console.log(currentSong.url);    
+	console.log(currentSong.length);
 };
 
 Events.typingInSearchField = function(event) {
@@ -172,9 +189,9 @@ function renderResults(musics){
 */			
 				
 		$('#search_table').dataTable().fnAddData( [
-			music.name,	
-			music.length != null ? music.length : '' ,
-			music.fileUrl ]
+			music.name.trim(),	
+			music.length != null ? music.length.trim() : '' ,
+			music.fileUrl.trim() ]
 		);
 
 	}).join('');
@@ -205,3 +222,17 @@ function playMusic(title, url) {
 	$('.jp-title li').text(title);
 
 }
+
+$(document).ready(function() {
+	
+	Events.enableFocusCall();
+	Events.submitFormOnEnterAndAutoSearchArrows();
+	
+	$('#searchField').focus();
+	$('#searchField').keyup(Events.typingInSearchField);
+	$('#searchButton').click(Events.submitForm);
+	$('#tagButton').click(Events.tagForm);
+  
+    $("#jquery_jplayer_1").jPlayer();
+    
+});
