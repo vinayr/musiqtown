@@ -36,15 +36,23 @@ li {
 	width: 600px;
 }
 
-#searchForm, #tagForm {
+#searchForm, #tagForm, #toLisnForm {
 	padding: 20px;
 }
 
-#searchField, #tagField {
+#searchField, #tagField, #toLisnField {
 	width: 80%;
 	font-size: 20px;
 	font-family: 'Maven Pro', cursive;
 }
+
+.row_selected {
+	color: red;
+}
+
+/*.row_selected {
+	background-color: #9FAFD1;
+}*/
 
 #uniform-searchButton {
 	margin-bottom: 10px;
