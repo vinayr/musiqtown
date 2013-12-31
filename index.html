@@ -58,8 +58,21 @@
 		  </div>
 	  </div>
 	  
-	  <div id="popup">
-	  
+	  <div id="popup">	  		  
+		  
+		  <div id="searchForm">
+			<input type="text" id="searchField" /> 
+			<input type="submit" id="searchButton" value="Search" /><br />
+			<ul id="autoComplete"></ul>
+		  </div>		 
+		  
+		  <div id="loading">
+			<img src="images/loading.gif" alt="Loading..." /><br />Loading...
+		  </div>
+		  <ul id="musics"></ul>   
+		  
+		  <div id="musicTable"></div>
+		  
 		  <div id="tagForm">
 			<input type="text" id="tagField" /> 
 			<input type="submit" id="tagButton" value="Tag" /><br />
@@ -73,19 +86,6 @@
 		  <div id="toLisnTable"></div>
 		  <a href="javascript:void(0)" id="delete">Delete selected row</a>
 		  
-		  <div id="searchForm">
-			<input type="text" id="searchField" /> 
-			<input type="submit" id="searchButton" value="Search" /><br />
-			<ul id="autoComplete"></ul>
-		  </div>		 
-		  
-		  <div id="loading">
-			<img src="images/loading.gif" alt="Loading..." /><br />Loading...
-		  </div>
-		  <ul id="musics"></ul>   
-		  
 	  </div>
-	  	  
-	  <div id="musicTable"></div>
    </body>
 </html>
