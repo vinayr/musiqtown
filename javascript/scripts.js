@@ -96,7 +96,7 @@ Events.submitForm = function() {
 			return item;
 		});			
 			
-		$('#music_table').html( '<table id="search_table"></table>' );
+		$('#musicTable').html( '<table id="search_table"></table>' );
 		
 		var oTable = $('#search_table').dataTable( {
 			"sScrollY": "200px",
@@ -134,6 +134,18 @@ Events.tagForm = function() {
 	console.log(currentSong.title);
 	console.log(currentSong.url);    
 	console.log(currentSong.length);
+};
+
+Events.toLisnForm = function() {
+	var toLisn = document.getElementById('toLisnField').value;
+	console.log(toLisn);
+	
+	$.post( "tolisn", { action: "add", content: toLisn })
+      .done(function( data ) {
+        //console.log( "Data Loaded: " + data );
+		$('#tolisn_table').dataTable().fnAddData( [
+		  toLisn ] );
+      });	 
 };
 
 Events.typingInSearchField = function(event) {
@@ -223,6 +235,51 @@ function playMusic(title, url) {
 
 }
 
+function initLisnTable() {
+	$('#toLisnTable').html( '<table id="tolisn_table"></table>' );		
+	var oTable = $('#tolisn_table').dataTable( {
+		"sScrollY": "200px",
+		"bPaginate": false,
+		"bInfo": false,
+		"bFilter": false,
+		"aoColumns": [
+			null
+		]
+	});
+	
+	$.post( "tolisn", { action: "list" })
+	  .done(function( data ) {
+	    var list = data.split('\n');
+		for (var i=0; i < list.length-1; i++) {
+			//console.log('list data '+list[i]);
+			oTable.fnAddData([ list[i] ]);
+		}
+	  });
+	
+	$("#tolisn_table").on("click", "tr", function() {		
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {		
+        var anSelected = oTable.$('tr.row_selected');
+        if ( anSelected.length !== 0 ) {
+			var del_data = oTable.fnGetData( anSelected[0] );
+			console.log("del data "+del_data[0]);
+			$.post( "tolisn", { action: "delete", content: del_data[0] })
+			  .done(function( data ) {
+			    oTable.fnDeleteRow( anSelected[0] );
+			  });            
+        }
+    } );		
+}
+
 $(document).ready(function() {
 	
 	Events.enableFocusCall();
@@ -232,7 +289,8 @@ $(document).ready(function() {
 	$('#searchField').keyup(Events.typingInSearchField);
 	$('#searchButton').click(Events.submitForm);
 	$('#tagButton').click(Events.tagForm);
-  
-    $("#jquery_jplayer_1").jPlayer();
-    
+	$('#toLisnButton').click(Events.toLisnForm);
+  	
+    $("#jquery_jplayer_1").jPlayer();    
+	initLisnTable();
 });
