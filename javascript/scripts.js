@@ -130,10 +130,23 @@ Events.submitForm = function() {
 
 Events.tagForm = function() {
 	var tag = document.getElementById('tagField').value;
-	console.log(tag);
+	var list = $.map(tag.split(","), $.trim);
+	console.log(list);
 	console.log(currentSong.title);
 	console.log(currentSong.url);    
 	console.log(currentSong.length);
+	
+	$.post( "tag", { 
+	  action: "add", 
+	  song_name: currentSong.title,
+	  song_url: currentSong.url,
+	  song_length: currentSong.length,
+	  song_tag: list
+	  }).done(function( data ) {
+        //console.log( "Data Loaded: " + data );
+		//$('#tolisn_table').dataTable().fnAddData( [
+		//  toLisn ] );
+      });
 };
 
 Events.toLisnForm = function() {
