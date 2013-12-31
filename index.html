@@ -59,25 +59,33 @@
 	  </div>
 	  
 	  <div id="popup">
-	     <div id="tagForm">
-            <input type="text" id="tagField" /> 
-			<input type="submit" id="tagButton" value="Tag" /><br />
-            <ul id="autoComplete"></ul>
-         </div>
-         <div id="searchForm">
-            <input type="text" id="searchField" /> 
-			<input type="submit" id="searchButton" value="Search" /><br />
-            <ul id="autoComplete"></ul>
-         </div>		 
-         <div>
-            <div id="loading">
-               <img src="images/loading.gif" alt="Loading..." /><br />Loading...
-            </div>
-            <ul id="musics">
-            </ul>
-         </div>
-      </div>
 	  
-	  <div id="music_table"></div>
+		  <div id="tagForm">
+			<input type="text" id="tagField" /> 
+			<input type="submit" id="tagButton" value="Tag" /><br />
+		  </div>
+		  
+		  <div id="toLisnForm">
+			<input type="text" id="toLisnField" /> 
+			<input type="submit" id="toLisnButton" value="To Lisn" /><br />
+		  </div>
+		  
+		  <div id="toLisnTable"></div>
+		  <a href="javascript:void(0)" id="delete">Delete selected row</a>
+		  
+		  <div id="searchForm">
+			<input type="text" id="searchField" /> 
+			<input type="submit" id="searchButton" value="Search" /><br />
+			<ul id="autoComplete"></ul>
+		  </div>		 
+		  
+		  <div id="loading">
+			<img src="images/loading.gif" alt="Loading..." /><br />Loading...
+		  </div>
+		  <ul id="musics"></ul>   
+		  
+	  </div>
+	  	  
+	  <div id="musicTable"></div>
    </body>
 </html>
