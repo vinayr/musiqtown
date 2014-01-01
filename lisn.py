@@ -18,6 +18,30 @@ class SongDB(db.Model):
 	length = db.StringProperty()
 	tags = db.ListProperty(str)
 
+class Songs(webapp2.RequestHandler):
+    def post(self):
+		action = cgi.escape(self.request.get('action'))
+		if(action == "list"):
+			tag = cgi.escape(self.request.get('tag'))
+			if(tag == "all"):
+				results = db.Query(SongDB)
+				for res in results:
+					self.response.write(res.name+'\n'+res.url+'\n'+res.length+'\n'+":".join(res.tags)+'\r')
+			else:
+				d = db.Query(SongDB)
+				results = d.filter('tags =', tag)
+				for res in results:
+					self.response.write(res.name+'\n'+res.url+'\n'+res.length+'\n'+":".join(res.tags)+'\r')
+					
+		elif(action == "delete"):
+			url = cgi.escape(self.request.get('url'))
+			# logging.info("delete url: %s", url)
+			d = db.Query(SongDB)
+			results = d.filter('url =', url)
+			for r in results:
+				r.delete()
+
+		
 class Tag(webapp2.RequestHandler):
     def post(self):
 		action = cgi.escape(self.request.get('action'))
@@ -26,16 +50,16 @@ class Tag(webapp2.RequestHandler):
 			song_url = cgi.escape(self.request.get('song_url'))
 			song_length = cgi.escape(self.request.get('song_length'))
 			song_tag = self.request.get_all('song_tag[]')
-			logging.info("song_name: %s", song_name)
-			logging.info("song_url: %s", song_url)
-			logging.info("song_length: %s", song_length)
-			logging.info("song_tag: %s", song_tag)
+			# logging.info("song_name: %s", song_name)
+			# logging.info("song_url: %s", song_url)
+			# logging.info("song_length: %s", song_length)
+			# logging.info("song_tag: %s", song_tag)
 			d = db.Query(SongDB)
 			results = d.filter('url =', song_url)
 			if results.count(limit=1):
 				for r in results:
 					if len(set(song_tag).intersection(r.tags)) > 0:
-						logging.info("already tagged")
+						# logging.info("already tagged")
 						break
 				else: #this is for loop's else
 					r.tags.extend(song_tag)
@@ -47,7 +71,16 @@ class Tag(webapp2.RequestHandler):
 				s.length = song_length
 				s.tags = song_tag
 				s.put()
-			
+				
+		elif(action == "list"):
+			if self.request.get('tag') == "all":
+				list = []
+				taglist = db.GqlQuery("SELECT DISTINCT tags FROM SongDB")
+				for t in taglist:
+					list.extend(t.tags)
+				res = ":".join(list)
+				self.response.write(res)
+
 			
 class ToLisn(webapp2.RequestHandler):
     def post(self):
@@ -66,12 +99,12 @@ class ToLisn(webapp2.RequestHandler):
 				r.delete()
 		elif(action == "list"):
 			list = db.Query(ToLisnDB)
-			#results = q.filter('data =', del_content)
 			for res in list:
-				self.response.out.write(res.data + '\n')
+				self.response.write(res.data + '\n')
 		
 application = webapp2.WSGIApplication([
     ('/', MainPage),
+	('/songs', Songs),
 	('/tag', Tag),
 	('/tolisn', ToLisn)
 ], debug=True)
