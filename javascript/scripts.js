@@ -1,7 +1,8 @@
 var currentSong = {
 	title: null,
 	length: null,
-	url: null
+	url: null,
+	tags: null
 };
 
 Events = {};
@@ -131,10 +132,10 @@ Events.submitForm = function() {
 Events.tagForm = function() {
 	var tag = document.getElementById('tagField').value;
 	var list = $.map(tag.split(","), $.trim);
-	console.log(list);
-	console.log(currentSong.title);
-	console.log(currentSong.url);    
-	console.log(currentSong.length);
+	// console.log(list);
+	// console.log(currentSong.title);
+	// console.log(currentSong.url);    
+	// console.log(currentSong.length);
 	
 	$.post( "tag", { 
 	  action: "add", 
@@ -151,7 +152,7 @@ Events.tagForm = function() {
 
 Events.toLisnForm = function() {
 	var toLisn = document.getElementById('toLisnField').value;
-	console.log(toLisn);
+	//console.log(toLisn);
 	
 	$.post( "tolisn", { action: "add", content: toLisn })
       .done(function( data ) {
@@ -280,17 +281,125 @@ function initLisnTable() {
     });
      
     /* Add a click handler for the delete row */
-    $('#delete').click( function() {		
+    $('#deleteToLisn').click( function() {		
         var anSelected = oTable.$('tr.row_selected');
         if ( anSelected.length !== 0 ) {
 			var del_data = oTable.fnGetData( anSelected[0] );
-			console.log("del data "+del_data[0]);
+			//console.log("del data "+del_data[0]);
 			$.post( "tolisn", { action: "delete", content: del_data[0] })
 			  .done(function( data ) {
 			    oTable.fnDeleteRow( anSelected[0] );
 			  });            
         }
-    } );		
+    });		
+}
+
+function getTagList() {
+	$.post( "tag", { 
+	  action: "list", 
+	  tag: "all"
+	  }).done(function( data ) {
+          //console.log( "tag list: " + data );
+		  var tags = data.split(':');
+		  for(var i=0;i<tags.length;i++) {
+			$("#tagList").append("<a class='tags' href='#' style='padding-left:1em'>"+tags[i]+"</a>");
+		  }
+		  $("#tagList").prepend("TAGS - <a class='tags' href='#'>all</a>");
+		  $('.tags').click( function() {
+		    var tag = $(this).text();
+			if(tag == "all")
+			  getAllSongs();
+			else
+			  getSongs(tag);
+		  });
+      });	
+}
+
+function getAllSongs() {
+	$.post( "songs", { 
+	  action: "list", 
+	  tag: "all"
+	  }).done(function( data ) {
+	      if(data)
+		    initSongTable();
+		  var songs = data.split('\r');
+		  for(var i = 0; i<songs.length-1; i++) {
+		    var info = songs[i].split('\n');
+		    $('#song_table').dataTable().fnAddData( [
+			  info[0],	
+			  info[2],
+			  info[3].replace(/\:/g,','),
+			  info[1] ]
+		    );
+		  }
+	});
+}
+
+function getSongs(tag) {
+	$.post( "songs", { 
+	  action: "list", 
+	  tag: tag
+	  }).done(function( data ) {
+	      if(data) 
+		    initSongTable();
+          var songs = data.split('\r');
+		  for(var i = 0; i<songs.length-1; i++) {
+		    var info = songs[i].split('\n');
+		    $('#song_table').dataTable().fnAddData( [
+			  info[0],	
+			  info[2],
+			  info[3].replace(/\:/g,','),
+			  info[1] ]
+		    );
+		  }
+	});
+}
+
+function initSongTable() {
+	$('#musicTable').html( '<table id="song_table"></table>' );
+		
+	var oTable = $('#song_table').dataTable( {
+		"sScrollY": "200px",
+		"bPaginate": false,
+		"bInfo": false,
+		"bFilter": false,
+		"aoColumns": [
+			{ "sTitle": "Name" },
+			{ "sTitle": "Length" },
+			{ "sTitle": "Tags" },
+			{ "bVisible": false}
+		]
+	});
+		
+	$("#song_table").on("click", "tr", function() {
+		var data = oTable.fnGetData(this);
+		currentSong.title = data[0];
+		currentSong.length = data[1];
+		currentSong.tags = data[2];
+		currentSong.url = data[3];
+		//console.log(data[2]);
+		playMusic(currentSong.title, currentSong.url);
+		
+		if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+	});
+	
+	$('#deleteSong').click( function() {	
+		var anSelected = oTable.$('tr.row_selected');
+        if ( anSelected.length !== 0 ) {
+			var song_url = oTable.fnGetData( anSelected[0], 3 );
+			//console.log("del data "+del_data);
+		    $.post( "songs", { action: "delete", url: song_url })
+		      .done(function( data ) {
+		        oTable.fnDeleteRow( anSelected[0] );
+		      });
+		}
+    });		
 }
 
 $(document).ready(function() {
@@ -306,4 +415,5 @@ $(document).ready(function() {
   	
     $("#jquery_jplayer_1").jPlayer();    
 	initLisnTable();
+	getTagList();
 });
