@@ -101,7 +101,7 @@ class ToLisn(webapp2.RequestHandler):
 			list = db.Query(ToLisnDB)
 			for res in list:
 				self.response.write(res.data + '\n')
-		
+
 application = webapp2.WSGIApplication([
     ('/', MainPage),
 	('/songs', Songs),
