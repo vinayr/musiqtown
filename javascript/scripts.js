@@ -64,7 +64,8 @@ Events.submitFormOnEnterAndAutoSearchArrows = function() {
 
 
 Events.submitForm = function() {	
-	var q = document.getElementById('searchField').value;
+	var q = $('#searchField').val();
+	
 	$("#autoComplete").hide();
 	$("#musics").html("");
 	$("#loading").show();
@@ -102,6 +103,8 @@ Events.submitForm = function() {
 		var oTable = $('#search_table').dataTable( {
 			"sScrollY": "200px",
 			"bPaginate": false,
+			"bInfo": false,
+			"bFilter": false,
 			"aoColumns": [
 				{ "sTitle": "Name" },
 				{ "sTitle": "Length" },
@@ -116,8 +119,7 @@ Events.submitForm = function() {
 			currentSong.url = data[2];
 			//console.log(data[2]);
 			playMusic(currentSong.title, currentSong.url);
-		});
-		
+		});		
 		
 		renderResults(musics);
 
@@ -130,7 +132,7 @@ Events.submitForm = function() {
 };
 
 Events.tagForm = function() {
-	var tag = document.getElementById('tagField').value;
+	var tag = $('#tagField').val();	
 	var list = $.map(tag.split(","), $.trim);
 	// console.log(list);
 	// console.log(currentSong.title);
@@ -144,21 +146,19 @@ Events.tagForm = function() {
 	  song_length: currentSong.length,
 	  song_tag: list
 	  }).done(function( data ) {
-        //console.log( "Data Loaded: " + data );
-		//$('#tolisn_table').dataTable().fnAddData( [
-		//  toLisn ] );
+		  setTimeout(getTagList,1000);
+		  $('#tagField').val('');
       });
 };
 
 Events.toLisnForm = function() {
-	var toLisn = document.getElementById('toLisnField').value;
-	//console.log(toLisn);
-	
+	var toLisn = $('#toLisnField').val();	
 	$.post( "tolisn", { action: "add", content: toLisn })
       .done(function( data ) {
         //console.log( "Data Loaded: " + data );
 		$('#tolisn_table').dataTable().fnAddData( [
 		  toLisn ] );
+		$('#toLisnField').val('');
       });	 
 };
 
@@ -194,37 +194,24 @@ Events.selectItemInAutoComplete = function(item){
 };
 
 function renderResults(musics){
-
-	var htmlPure =  $.map(musics,function(music,index){
+	if(musics.length == 0) {
+	  $("#musics").html("<b class=\"notFound\">No results found for "+$('#searchField').val()+"</b>");
+	  return;
+	}
+	
+	$.map(musics,function(music,index){
 		var shared4 = "";
-
 		music.name = music.name.replace("mp3","").replace(/([A-z]+\.)+[A-z]+/,"").replace(/\s*-\s*$/,"").replace(/\(.*\)/,"");
 		
 		if (music.fileUrl.indexOf("4shared") != -1)
-			shared4 = ' class="shared4"';
-/*
-		return "<li class=\"item"+index%2+"\">"
-				+ "<div"+shared4+">
-					+ "<b>"+ music.name + "</b><br>" 
-					+ (music.size != null ?  ("<span><b>Filesize: </b>"+music.size+"</span>") : '')
-					+ (music.bitTrate != null ?  ("<span><b>Bitrate: </b>"+music.bitTrate+"</span>") : '')
-					+ (music.length != null ?  ("<span><b>Length: </b>"+music.length+"</span>") : '')
-					+ '<input type="hidden" class="fileUrl" value="'+music.fileUrl+'">'
-				+ "</div>"
-			+ "</li>";
-*/			
+			shared4 = ' class="shared4"';		
 				
 		$('#search_table').dataTable().fnAddData( [
 			music.name.trim(),	
 			music.length != null ? music.length.trim() : '' ,
 			music.fileUrl.trim() ]
 		);
-
-	}).join('');
-
-	var notFound = "<b class=\"notFound\">Sorry, no results found for "+document.getElementById('searchField').value+"</b>"
-	
-	$("#musics").html(htmlPure == '' ? notFound : htmlPure);
+	});		
 };
 	
 function playMusic(title, url) {
@@ -300,11 +287,12 @@ function getTagList() {
 	  tag: "all"
 	  }).done(function( data ) {
           //console.log( "tag list: " + data );
+		  $(".tags").remove();
+		  $("#tagList").append("<a class='tags' href='#'>all</a>");
 		  var tags = data.split(':');
 		  for(var i=0;i<tags.length;i++) {
 			$("#tagList").append("<a class='tags' href='#' style='padding-left:1em'>"+tags[i]+"</a>");
 		  }
-		  $("#tagList").prepend("TAGS - <a class='tags' href='#'>all</a>");
 		  $('.tags').click( function() {
 		    var tag = $(this).text();
 			if(tag == "all")
@@ -387,19 +375,22 @@ function initSongTable() {
             oTable.$('tr.row_selected').removeClass('row_selected');
             $(this).addClass('row_selected');
         }
-	});
-	
-	$('#deleteSong').click( function() {	
-		var anSelected = oTable.$('tr.row_selected');
-        if ( anSelected.length !== 0 ) {
-			var song_url = oTable.fnGetData( anSelected[0], 3 );
-			//console.log("del data "+del_data);
-		    $.post( "songs", { action: "delete", url: song_url })
-		      .done(function( data ) {
-		        oTable.fnDeleteRow( anSelected[0] );
-		      });
-		}
-    });		
+	});		
+}
+
+function deleteSong() {	
+	var anSelected = $('#song_table').dataTable().$('tr.row_selected');	
+	if ( anSelected.length !== 0 ) {
+		var song_url = $('#song_table').dataTable().fnGetData( anSelected[0], 3 );
+		//console.log("del data "+del_data);
+		$.post( "songs", { action: "delete", url: song_url })
+		  .done(function( data ) {
+			$('#song_table').dataTable().fnDeleteRow( anSelected[0] );
+			setTimeout(getTagList,1000);
+		  });
+	}
+	else
+		console.log("select a row");
 }
 
 $(document).ready(function() {
@@ -412,8 +403,11 @@ $(document).ready(function() {
 	$('#searchButton').click(Events.submitForm);
 	$('#tagButton').click(Events.tagForm);
 	$('#toLisnButton').click(Events.toLisnForm);
+	$('#deleteSong').click(deleteSong);
   	
-    $("#jquery_jplayer_1").jPlayer();    
+    $("#jquery_jplayer_1").jPlayer(); 
+
+	getAllSongs();
 	initLisnTable();
 	getTagList();
 });
