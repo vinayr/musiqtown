@@ -101,13 +101,14 @@ Events.submitForm = function() {
 		$('#musicTable').html( '<table id="search_table"></table>' );
 		
 		var oTable = $('#search_table').dataTable( {
-			"sScrollY": "200px",
-			"bPaginate": false,
+			//"sScrollY": "200px",
+			"bPaginate": true,
 			"bInfo": false,
-			"bFilter": false,
+			"bFilter": true,
+			"bAutoWidth": false,
 			"aoColumns": [
-				{ "sTitle": "Name" },
-				{ "sTitle": "Length" },
+				{ "sTitle": "Name", "sWidth": "80%" },
+				{ "sTitle": "Length", "sWidth": "20%"  },
 				{ "bVisible": false}
 			]
 		});
@@ -347,14 +348,15 @@ function initSongTable() {
 	$('#musicTable').html( '<table id="song_table"></table>' );
 		
 	var oTable = $('#song_table').dataTable( {
-		"sScrollY": "200px",
-		"bPaginate": false,
+		//"sScrollY": "200px",
+		"bPaginate": true,
 		"bInfo": false,
-		"bFilter": false,
+		"bFilter": true,
+		"bAutoWidth": false,
 		"aoColumns": [
-			{ "sTitle": "Name" },
-			{ "sTitle": "Length" },
-			{ "sTitle": "Tags" },
+			{ "sTitle": "Name", "sWidth": "60%" },
+			{ "sTitle": "Length", "sWidth": "10%" },
+			{ "sTitle": "Tags", "sWidth": "30%" },
 			{ "bVisible": false}
 		]
 	});
