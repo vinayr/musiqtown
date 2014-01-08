@@ -32,18 +32,12 @@ li {
 	list-style-type: none;
 }
 
-#popup {
-	width: 600px;
-}
-
 #searchForm, #tagForm, #toLisnForm {
 	padding: 20px;
 }
 
 #searchField, #tagField, #toLisnField {
-	width: 80%;
-	font-size: 20px;
-	font-family: 'Maven Pro', cursive;
+	width: 20%;
 }
 
 .row_selected {
@@ -53,11 +47,6 @@ li {
 /*.row_selected {
 	background-color: #9FAFD1;
 }*/
-
-#uniform-searchButton {
-	margin-bottom: 10px;
-	margin-left: 10px;
-}
 
 #musics li {
 	cursor: pointer;
@@ -78,25 +67,6 @@ li {
 	padding-top: 100px;
 }
 
-
-.item0 {
-	background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255,
-		0) ), to(rgba(255, 255, 255, 0) ) ), url(../images/noise.png);
-	background-color: #CFCFCF;
-}
-
-.item1 {
-	background-image: -webkit-gradient(radial, 50% 0, 100, 50% 0, 0, from(rgba(255, 255, 255,
-		0) ), to(rgba(255, 255, 255, 0) ) ), url(../images/noise.png);
-	background-color: #F5F5F5;
-}
-
-.shared4 {
-	background-image: url(../images/4shared.png);
-	background-repeat: no-repeat;
-	background-position: right top;
-	min-height: 60px;
-}
 
 /* containers hide initially */
 #loading {
