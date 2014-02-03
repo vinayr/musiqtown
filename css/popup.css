@@ -32,14 +32,29 @@ li {
 	list-style-type: none;
 }
 
-#searchForm, #tagForm, #toLisnForm {
+#wrapper{
+    width:1000px;
+    margin:0 auto;
+}
+
+#jplayer_container{
+}
+
+#tagForm, #toLisnForm {
 	padding: 20px;
 }
 
-#searchField, #tagField, #toLisnField {
+#searchForm{
+	padding: 20px;
+}
+
+#tagField, #toLisnField {
 	width: 20%;
 }
 
+#searchField {
+	width: 20%;
+}
 .row_selected {
 	color: red;
 }
