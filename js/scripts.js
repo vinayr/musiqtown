@@ -398,7 +398,7 @@ function deleteSong() {
 
 $(document).ready(function() {
 	
-	//Events.enableFocusCall();
+	Events.enableFocusCall();
 	Events.submitFormOnEnterAndAutoSearchArrows();
 	
 	$('#searchField').focus();
