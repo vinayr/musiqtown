@@ -70,7 +70,8 @@ Events.submitForm = function() {
 	$("#musics").html("");
 	$("#loading").show();
 	
-	$.get('http://mp3skull.com/search.php?q=' + escape(q), function(data) {
+	//$.get('http://mp3skull.com/search.php?q=' + escape(q), function(data) {
+	$.get('http://mp3skull.com/mp3/' + escape(q) +'.html', function(data) {
 		$("#autoComplete").hide();
 		$("#loading").hide();
 		var page = data.responseText;
